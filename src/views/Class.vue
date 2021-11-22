@@ -28,11 +28,18 @@
         </tr>
     </table> -->
     <ul class="content" id="list">
-        <li @click="getHandle2()" v-for="(item,index) in display" :key="index">{{item.name}}</li>
+        <li @click="getHandle2()" v-for="(item,index) in display.slice((curPage-1)*pageSize,curPage*pageSize)" :key="index">{{item.name}}</li>
     </ul>
     <!-- <button id="pre">上一页</button> -->
     <!-- <p id="index_num" style="display: inline;">/</p> -->
     <!-- <button id="next">下一页</button> -->
+    <!--分页控件-->
+    <div id="pageControl">
+        <input type="button" class="btn_PageControl" v-if="curPage>1" @click="curPage--" value="&laquo;"> 
+        <span>当前第{{curPage}}页</span>/<span>总共{{pageSum}}页</span>
+        <input type="button" class="btn_PageControl" v-if="curPage<pageSum" @click="curPage++" value="&raquo;">
+    </div>
+
     </div>
 </template>
 
@@ -52,6 +59,9 @@ export default {
           deadLine:'',
           publisher:'',
           title:'',
+          pageSum:0,
+          pageSize:5,
+          curPage:1,
       };
   },
     mounted(){
@@ -99,6 +109,9 @@ export default {
                 console.log(res);
                 this.display = res.data.data;
                 this.classID = res.data.data[0].classID;
+                // this.pageSum= res.data.data.mapList.length/this.pageSize;
+                console.log('@@pageSum is',Math.ceil(res.data.data.length/this.pageSize));//NICE
+                this.pageSum = Math.ceil(res.data.data.length/this.pageSize);
                 // console.log(res.data.data[0].classID)
             })
             .catch(err=>console.log(err))
@@ -113,6 +126,7 @@ export default {
                 console.log(res);
                 this.display = res.data.data;
                 this.classID = res.data.data[0].classID;
+                this.pageSum = Math.ceil(res.data.data.length/this.pageSize);
                 // console.log(res.data.data[0].classID)
             })
             .catch(err=>console.log(err))
@@ -158,4 +172,26 @@ export default {
     @import url("../assets/css/reset.css");
     @import url("../assets/css/main.css");
     @import url("../assets/css/nav.css");
+    #pageControl{
+        position: relative;
+        bottom: 0;
+        margin: auto;
+    }
+    #list{
+        height: 500px;
+    }
+    .btn_PageControl{ 
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+    width:60px;
+    height:40px;
+    text-align:center;
+    font-size:20px;
+    background:rgb(241,241,241);
+    border: none;
+    }
+    .btn_PageControl:hover{
+        background:rgb(221,221,221);
+    }
 </style>
