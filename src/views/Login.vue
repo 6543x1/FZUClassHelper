@@ -59,11 +59,15 @@ export default {
         console.log(res.data.data.jwtToken);
         // this.$store.mutations.setToken(this.$store.state,res.data.data.jwtToken);
         sessionStorage.setItem('token',res.data.data.jwtToken);
-        sessionStorage.setItem('user',res.data.data.user);
+        sessionStorage.setItem('user',JSON.stringify(res.data.data.user));
+        let userInfo=sessionStorage.getItem('user');
+        console.log(typeof(userInfo));
+        console.log(userInfo);
         // this.token=res.data.data.jwtToken;
         // console.log("@@",this.token);
-        this.$router.push({path:'/',query:{name:JSON.stringify(res.data.data)}});
         this.$store.commit('setToken',res.data.data.jwtToken);
+        this.$router.push({path:'/',query:{name:JSON.stringify(res.data.data)}});
+       
         // router.push({path:'/',query:{name:res.data.data}});
         })
         .catch((err) => console.log(err));

@@ -86,6 +86,11 @@ export default {
         // headers 表示请求头
         getHandle(){
             // console.log("hhh")
+            let userInfo=JSON.parse(sessionStorage.getItem('user'));
+            if(userInfo.role==='teacher'){
+                this.getHandle1();
+                return;
+            }
             let token = this.$store.state.token
             service.defaults.headers.common['token'] = token
             service.get('api'+'/classes/getMyClass',{
