@@ -9,6 +9,7 @@ import Management from "../views/Management.vue";
 import List from "../views/List.vue";
 import Active from "../views/Active.vue";
 import Login from "../views/Login.vue";
+import MyNotification from "../views/MyNotification.vue";
 
 const routes = [
   {
@@ -29,9 +30,9 @@ const routes = [
     path: "/",
     name: "Class",
     component: Class,
-    meta:{
+    meta: {
       title: "我的班级",
-    }
+    },
   },
   {
     path: "/Create",
@@ -69,12 +70,22 @@ const routes = [
     component: Active,
   },
   {
-    path:"/Login",
-    name:"Login",
+    path: "/Login",
+    name: "Login",
     component: Login,
-    meta:{
-      title: '用户登录',
-    }
+    meta: {
+      title: "用户登录",
+    },
+  },
+  {
+    //Notification是Vue自有的，不要命名冲突了
+    //记得在上面import引入！！！！
+    path: "/MyNotification",
+    name: "MyNotification",
+    component: MyNotification,
+    meta: {
+      title: "主页———通知",
+    },
   },
 ];
 
@@ -85,27 +96,25 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
-    }
+  }
   var token = sessionStorage.getItem("token");
   //如果没登录,都导向登录页
   if (!token) {
-    if (to.path !== '/Login') {
-      next({ path: '/Login' })
-    }
-    else {
+    if (to.path !== "/Login") {
+      next({ path: "/Login" });
+    } else {
       next();
     }
-  }
-  else {
+  } else {
     next();
   }
-})
+});
 /**
  * 跳转登陆页面强制刷新，相当于F5
  */
-router.afterEach((to,from)=>{
-  if(from.path != '/Login' && from.path != '/' && to.path == '/Login'){
-      window.location.reload();
+router.afterEach((to, from) => {
+  if (from.path != "/Login" && from.path != "/" && to.path == "/Login") {
+    window.location.reload();
   }
-})
+});
 export default router;
