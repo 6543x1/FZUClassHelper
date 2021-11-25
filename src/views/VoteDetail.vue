@@ -18,7 +18,15 @@
             </div>
             <div class="box6">
                 <!-- <input type="checkbox" v-for="(item,index) in vote.selections" :key="index" name="1">{{item}}</input> -->
-                <p v-for="(item,index) in vote.selections" :key="index"><label><input type="radio" name="1" :value="item" v-model="curSelection" @change="showSelection">{{item}}</label></p>
+                <p v-for="(item,index) in vote.selections" :key="index">
+                    <span v-if="vote.limitation==1">
+                    <label><input type="radio" name="1" :value="item" v-model="curSelection" @change="showSelection"/>{{item}}</label>
+                    </span>
+                    <span v-if="vote.limitation!=1">
+                    <label><input type="checkbox" name="2" v-model="selections" :value="item" @change="showSelections"/>{{item}}</label>
+                    </span>
+                    <!-- <label><v-if="vote.limitation!=1" input type="checkBox" name="2" :value="item" v-model="Selections" @change="showSelections"/>{{item}}</label> -->
+                    </p>
                 <!-- <form action="" method="post">
                     <p><label><input type="checkbox" name="1" value="1">选项一选项一选项一选项一</label></p>
                     <p><label><input type="checkbox" name="1" value="2">选项一选项一选项一选项一</label></p>
@@ -53,6 +61,7 @@ export default {
         return {
             vote:{},
             curSelection:'',
+            selections:[],
         }
     },
     computed:{
@@ -63,15 +72,27 @@ export default {
     methods:{
         gotoVote(){
                 let param = new FormData();
-      param.append("vid", this.vote.nid);
-      param.append("selections",this.curSelection);
+      param.append("vid", this.vote.vid);
+      if(this.vote.limitation==1){
+          param.append("selections",JSON.stringify(this.curSelection));
+          
+            console.log(JSON.stringify(this.curSelection));
+      }
+      else{
+          console.log("selections",this.selections);
+          param.append("selections",JSON.stringify(this.selections));
+          console.log(JSON.stringify(this.selections));
+      }
+      
       let token = sessionStorage.getItem('token');
       service.defaults.headers.common["token"] = token;
+      //"/api/classes/"+this.vote.classID+"/notice/testVote"
       service
-        .post("/api/classes/"+this.vote.classID+"/notice/vote", param)
+        .post("/api/classes/"+this.vote.classID+"/vote", param)
         .then((res) => {
           console.log(res);
             alert(res.data.msg);
+            console.log("Selections listed ",res.data.data);
             // if(res.data.status==true){
             //     this.notice.confirm=true;
             // }
@@ -81,6 +102,9 @@ export default {
         },
         showSelection(){
             console.log(this.curSelection);
+        },
+        showSelections(){
+            console.log(this.selections);
         }
     },
     mounted(){

@@ -554,7 +554,7 @@ option {
     margin: 0px 50px 20px 50px;
 }
 
-#signi {
+/* #signi {
     height: 200px;
     width: 200px;
     margin-left: 300px;
@@ -565,7 +565,7 @@ option {
     font-size: 40px;
     outline: none;
     cursor: pointer;
-}
+} */
 
 #numsign {
     margin-top: 20px;
@@ -600,74 +600,7 @@ option {
     position: relative;
 }
 
-.loading {
-    width: 8em;
-    height: 8em;
-    position: relative;
-    margin-left: 250px;
-    margin-top: 30px;
-    margin-right: 150px;
-    float: left;
-}
 
-.loading .progress {
-    position: absolute;
-    width: 6em;
-    height: 6em;
-    background-color: white;
-    border-radius: 50%;
-    left: 1em;
-    top: 1em;
-    line-height: 6em;
-    text-align: center;
-}
-
-.left,
-.right {
-    width: 4em;
-    height: 8em;
-    overflow: hidden;
-    position: relative;
-    float: left;
-    background-color: rgb(66, 221, 146);
-}
-
-.left {
-    border-radius: 8em 0 0 8em;
-}
-
-.right {
-    border-radius: 0 8em 8em 0;
-}
-
-.left:after,
-.right:after {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 4em;
-    height: 8em;
-    background-color: white;
-    border-radius: 8em 0 0 8em;
-    background-color: rgb(122, 159, 244);
-}
-
-.right:after {
-    content: "";
-    position: absolute;
-    display: block;
-    border-radius: 0 8em 8em 0;
-}
-
-.left:after {
-    transform-origin: right center;
-    transform: rotateZ(0deg);
-}
-
-.right:after {
-    transform-origin: left center;
-    transform: rotateZ(45deg);
-}
 
 #votei {
     position: relative;

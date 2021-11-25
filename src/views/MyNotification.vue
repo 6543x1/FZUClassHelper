@@ -134,11 +134,42 @@ export default {
           this.$router.push({name:'VoteDetail',
         params:{
             vote:JSON.stringify(item),
-        }})
+        }})}
+        else if(typeof(item.signID)!='undefined'){
+          this.$router.push({name:'SignDetail',params:{signDetail:JSON.stringify(item)}});
         }
+        
     },
-    getRandom(){
+    getRandom(){//直接跳转到详情页，不墨迹了
       console.log('Random...');
+        console.log("classIDs",this.classIDs);
+      console.log("classIDs[0]",this.classIDs[0].classID);
+      this.classID=this.classIDs[0].classID;
+      let url="api/classes/"+this.classID+"/RandomStu";
+      let xhr = new XMLHttpRequest();
+      xhr.open("get", url, true);
+      // this.addURLParam(url, "classID", this.classID);
+      xhr.setRequestHeader("token", this.token);
+      xhr.send(null);
+      xhr.onreadystatechange = ()=> {
+        if (xhr.readyState == 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            // alert("获取成功！");
+            var myJson = JSON.parse(xhr.responseText);
+            console.log("RandomStu",myJson);
+              // 添加className属性
+            myJson.data.className=this.classIDs[0].name;
+            // myJson.data[i].
+            this.$router.push({name:'RandomDetail',params:{randomStu:JSON.stringify(myJson.data)}});
+            // this.display=myJson.data;
+            // console.log(typeof(this.display));
+            // console.log(this.display);
+            // this.pageSum=Math.ceil(this.display.length/this.pageSize);
+            this.flag=4;
+
+          } else alert("Request was unsuccessful:" + xhr.status);
+        }
+      };
     },
     //获取投票
     GetVotes() {
@@ -216,22 +247,31 @@ export default {
 
     //获取签到
     GetSignIn() {
-      let url = "api/classes/{classID}/signIn";
+        console.log("classIDs",this.classIDs);
+      console.log("classIDs[0]",this.classIDs[0].classID);
+      this.classID=this.classIDs[0].classID;
+      let url="api/classes/"+this.classID+"/signIn";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
-      this.addURLParam(url, "classID", this.classID);
+      // this.addURLParam(url, "classID", this.classID);
       xhr.setRequestHeader("token", this.token);
       xhr.send(null);
       xhr.onreadystatechange = ()=> {
         if (xhr.readyState == 4) {
           if (xhr.status >= 200 && xhr.status < 300) {
-            alert("获取成功！");
+            // alert("获取成功！");
             var myJson = JSON.parse(xhr.responseText);
-            this.deadline = myJson.data.deadline;
-            this.publisher = myJson.data.publisher;
-            this.title = myJson.data.title;
-            this.vid = myJson.data.vid;
-            this.ModifyDeadline();
+            console.log("SignInRes",myJson);
+              for(var i=0; i<myJson.length;i++){ // 添加className属性
+            myJson[i].className=this.classIDs[0].name;
+            // myJson.data[i].
+        }
+            this.display=myJson;
+            console.log(typeof(this.display));
+            console.log(this.display);
+            this.pageSum=Math.ceil(this.display.length/this.pageSize);
+            this.flag=3;
+
           } else alert("Request was unsuccessful:" + xhr.status);
         }
       };
@@ -263,7 +303,7 @@ export default {
       xhr.onreadystatechange =  ()=> { 
         if (xhr.readyState == 4) {
           if (xhr.status >= 200 && xhr.status < 300) {
-            alert("获取成功！");
+            // alert("获取成功！");
             var myJson = JSON.parse(xhr.responseText);
             console.log(myJson);
             // this.classID = myJson.data.classID;

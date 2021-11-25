@@ -12,6 +12,8 @@ import Login from "../views/Login.vue";
 import MyNotification from "../views/MyNotification.vue";
 import NoticeDetail from "../views/NoticeDetail.vue";
 import VoteDetail from "../views/VoteDetail.vue";
+import RandomDetail from "../views/RandomDetail.vue";
+import SignDetail from "../views/SignDetail.vue";
 
 const routes = [
   {
@@ -103,6 +105,22 @@ const routes = [
     component: VoteDetail,
     meta: {
       title: "投票详情",
+    },
+  },
+  {
+    path: "/RandomDetail/:randomStu",//必须在路由声明params参数
+    name: "RandomDetail",
+    component: RandomDetail,
+    meta: {
+      title: "选人详情",
+    },
+  },
+  {
+    path: "/SignDetail/:signDetail",//必须在路由声明params参数
+    name: "SignDetail",
+    component: SignDetail,
+    meta: {
+      title: "签到详情",
     },
   },
 ];

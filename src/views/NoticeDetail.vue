@@ -92,7 +92,7 @@ export default {
   name: "NoticeDetail",
   components: {
     MyNav,
-  },
+  }, 
   methods: {
       gotoConfirm(){
         //   let url="api/classes/"+this.notice.classID+"/notice/confirm";
@@ -116,7 +116,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .notice_confirm button {
   cursor: pointer;
   border: none;

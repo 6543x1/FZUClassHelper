@@ -13,6 +13,14 @@ module.exports = {
         },
         //重写路径  需要设置重写的话，要在后面的调用接口前加上/api 来代替target
       },
+      "/local":{
+        target:"http://127.0.0.1:8099/",
+        changeOrigin:true,
+        ws:true,
+        pathRewrite:{
+          "^/local":"/",
+        }
+      }
     },
   },
 };
