@@ -671,7 +671,7 @@ option {
 
 #votei {
     position: relative;
-    left: 300px;
+    left: 0px;
     height: 30px;
     width: 150px;
     font-size: 20px;

@@ -11,6 +11,7 @@ import Active from "../views/Active.vue";
 import Login from "../views/Login.vue";
 import MyNotification from "../views/MyNotification.vue";
 import NoticeDetail from "../views/NoticeDetail.vue";
+import VoteDetail from "../views/VoteDetail.vue";
 
 const routes = [
   {
@@ -89,11 +90,19 @@ const routes = [
     },
   },
   {
-    path: "/NoticeDetail",
+    path: "/NoticeDetail/:notice",//必须在路由声明params参数
     name: "NoticeDetail",
     component: NoticeDetail,
     meta: {
-      title: "通知详情",
+      title: "公告详情",
+    },
+  },
+  {
+    path: "/VoteDetail/:vote",//必须在路由声明params参数
+    name: "VoteDetail",
+    component: VoteDetail,
+    meta: {
+      title: "投票详情",
     },
   },
 ];

@@ -2,65 +2,31 @@
 <template>
   <div class="myNotification">
     <MyNav></MyNav>
-    <!-- <div class="box">
-      <div class="index">
-        <a href="index.html"
-          ><img src="../assets/img/font.png" alt="福大班务"
-        /></a>
-      </div>
-
-      <div class="nav">
-        <ul>
-          <li>
-            <a href="index.html"
-              ><img src="../assets/img/通知(3).png" alt="" />通知</a
-            >
-          </li>
-          <li>
-            <a href="publish.html"
-              ><img src="../assets/img/发布.png" alt="" />发布</a
-            >
-          </li>
-          <li>
-            <a href="news.html"
-              ><img src="../assets/img/班级2.png" alt="" />班级</a
-            >
-          </li>
-        </ul>
-      </div>
-
-      <div class="center">
-        <a href="sign.html"
-          ><img src="../assets/img/头像.png" alt="头像" />我的</a
-        >
-      </div>
-    </div> -->
-
     <div id="layout">
       <nav>
         <input
           type="button"
           value="全部"
-          v-on:click="Getunfinished"
+          v-on:click="GetUnfinished"
           id="button-nav"
         />
         <br />
         <input
           type="button"
           value="公告"
-          v-on:click="Getannouncement"
+          v-on:click="GetAnnouncement"
           id="button-nav"
         /><br />
         <input
           type="button"
           value="投票"
-          v-on:click="Getvotes"
+          v-on:click="GetVotes"
           id="button-nav"
         /><br />
         <input
           type="button"
           value="签到"
-          v-on:click="Getsignin"
+          v-on:click="GetSignIn"
           id="button-nav"
         /><br />
         <input
@@ -85,14 +51,14 @@
         </table>
         
       <ul class="content" id="list">
-      <li
+      <li @click="gotoDetail(item)"
         v-for="(item, index) in display.slice( (curPage - 1) * pageSize,
           curPage * pageSize)"
         :key="index"
       >
-        {{ item.title }}
+        {{item.multi}}{{ item.title }}
         <br>
-        截止时间:{{item.deadLine}}
+       {{item.className}}&nbsp;截止时间:{{item.deadLine}}
       </li>
     </ul>
     <div id="pageControl">
@@ -112,40 +78,7 @@
         value="&raquo;"
       />
     </div>
-        <!-- <div id="notice">
-          <h2>{{ title}}</h2>
-          <p>
-            {{ publisher}}&ensp;&ensp;&ensp;&ensp;&ensp;{{ deadline }}
-          </p>
-        </div> -->
-
-        <!-- <div id="notice1">
-          <h2>{{ title[1] }}</h2>
-          <p>
-            {{ publisher[1] }}&ensp;&ensp;&ensp;&ensp;&ensp;{{ deadline[1] }}
-          </p>
-        </div>
-
-        <div id="notice2">
-          <h2>{{title[2]}}</h2>
-          <p>
-            {{ publisher[2] }}&ensp;&ensp;&ensp;&ensp;&ensp;{{ deadline[2] }}
-          </p>
-        </div>
-
-        <div id="notice3">
-          <h2>{{ title[3] }}</h2>
-          <p>
-            {{ publisher[3] }}&ensp;&ensp;&ensp;&ensp;&ensp;{{ deadline[3] }}
-          </p>
-        </div>
-
-        <div id="notice4">
-          <h2>{{ title[4] }}</h2>
-          <p>
-            {{ publisher[4] }}&ensp;&ensp;&ensp;&ensp;&ensp;{{ deadline[4] }}
-          </p>
-        </div> -->
+     
       </div>
     </div>
   </div>
@@ -172,6 +105,8 @@ export default {
       pageSum:0,
       pageSize:5,
       curPage:1,
+      flag:0,
+      preDisplay:['(公告)','（投票）','(签到)','(抽签)']
     };
   },
   computed: {
@@ -185,36 +120,64 @@ export default {
   },
 
   methods: {
+    
+    gotoDetail(item){
+        if(typeof(item.body)!='undefined'){
+          // params传递需要指定name
+          console.log('item',item);
+        this.$router.push({name:'NoticeDetail',
+        params:{
+            notice:JSON.stringify(item),
+        }})
+        }
+        else if(typeof(item.selections)!='undefined'){
+          this.$router.push({name:'VoteDetail',
+        params:{
+            vote:JSON.stringify(item),
+        }})
+        }
+    },
     getRandom(){
       console.log('Random...');
     },
     //获取投票
-    Getvotes() {
-      let url = "api/classes/{classID}/getVotes";
+    GetVotes() {
+      console.log("classIDs",this.classIDs);
+      console.log("classIDs[0]",this.classIDs[0].classID);
+      this.classID=this.classIDs[0].classID;
+      let url="api/classes/"+this.classID+"/getVotes";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
       xhr.setRequestHeader("token", this.token);
-      this.addURLParam(url, "classID", this.classID);
+      // this.addURLParam(url, "classID", this.classID);
       xhr.send(null);
       xhr.onreadystatechange = ()=> {
         if (xhr.readyState == 4) {
           if (xhr.status >= 200 && xhr.status < 300) {
-            alert("获取成功！");
             var myJson = JSON.parse(xhr.responseText);
-            this.deadline = myJson.data[0].deadline;
-            this.publisher = myJson.data[0].publisher;
-            this.title = myJson.data[0].title;
-            this.vid = myJson.data[0].vid;
-            this.ModifyDeadline();
+            console.log(myJson);
+            this.display=myJson;
+             for(var i=0; i<this.display.length;i++){ // 添加className属性
+              this.display[i].className=this.classIDs[0].name;
+              this.display[i].multi=this.display[i].limitation==1?'(单选)':'(多选)';
+            // myJson.data[i].
+        }
+            console.log(typeof(this.display));
+            console.log(this.display);
+            this.pageSum=Math.ceil(this.display.length/this.pageSize);
+            this.flag=2;
+            // this.ModifyDeadline();
           } else alert("Request was unsuccessful:" + xhr.status);
         }
       };
     },
 
     //获取公告
-    Getannouncement() {
+    GetAnnouncement() {
       // let url = "api/classes/{classID}/notice";
-       console.log("classIDs",this.classIDs);
+      // 需要写循环来获取全部班级的信息，同时item里要加入...额那个班级名字
+      // 使用unshift在末尾添加
+      console.log("classIDs",this.classIDs);
       console.log("classIDs[0]",this.classIDs[0].classID);
       this.classID=this.classIDs[0].classID;
       let url="api/classes/"+this.classID+"/notice";
@@ -230,6 +193,12 @@ export default {
             console.log(xhr.responseText);
             var myJson = JSON.parse(xhr.responseText);
             console.log("noticeRes",myJson);
+           
+            
+        for(var i=0; i<myJson.data.length;i++){ // 添加className属性
+            myJson.data[i].className=this.classIDs[0].name;
+            // myJson.data[i].
+        }
             this.display=myJson.data;
             console.log(typeof(this.display));
             console.log(this.display);
@@ -239,13 +208,14 @@ export default {
             // this.title = myJson.data[0].title;
             // this.vid = myJson.data[0].vid;
             this.ModifyDeadline();
+            this.flag=1;
           } else alert("Request was unsuccessful:" + xhr.status);
         }
       };
     },
 
     //获取签到
-    Getsignin() {
+    GetSignIn() {
       let url = "api/classes/{classID}/signIn";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
@@ -308,7 +278,7 @@ export default {
     },
 
     //获取还未完成的所有活动
-    Getunfinished() {
+    GetUnfinished() {
       let url = "api/classes/{classID}/unconfirmed";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
