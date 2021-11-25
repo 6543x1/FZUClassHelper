@@ -10,6 +10,7 @@ import List from "../views/List.vue";
 import Active from "../views/Active.vue";
 import Login from "../views/Login.vue";
 import MyNotification from "../views/MyNotification.vue";
+import NoticeDetail from "../views/NoticeDetail.vue";
 
 const routes = [
   {
@@ -85,6 +86,14 @@ const routes = [
     component: MyNotification,
     meta: {
       title: "主页———通知",
+    },
+  },
+  {
+    path: "/NoticeDetail",
+    name: "NoticeDetail",
+    component: NoticeDetail,
+    meta: {
+      title: "通知详情",
     },
   },
 ];

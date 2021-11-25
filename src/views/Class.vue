@@ -57,11 +57,11 @@
         {{ item.name }}
       </li>
     </ul>
-    <!-- <button id="pre">上一页</button> -->
-    <!-- <p id="index_num" style="display: inline;">/</p> -->
-    <!-- <button id="next">下一页</button> -->
+    <!-- <button id="pre">上一页</button>
+    <p id="index_num" style="display: inline;">/</p>
+    <button id="next">下一页</button> -->
     <!--分页控件-->
-    <!-- <div id="pageControl">
+    <div id="pageControl">
       <input
         type="button"
         class="btn_PageControl"
@@ -77,7 +77,7 @@
         @click="curPage++"
         value="&raquo;"
       />
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -152,7 +152,7 @@ export default {
         this.getHandle1();
         return;
       }
-      let token = this.$store.state.token;
+      let token = sessionStorage.getItem('token');
       service.defaults.headers.common["token"] = token;
       service
         .get("api" + "/classes/getMyClass", {})
