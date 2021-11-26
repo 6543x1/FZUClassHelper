@@ -67,6 +67,7 @@ export default {
     data(){
         return {
         classes:[],
+        selections:[]，
     }},
     components:{
         MyNav
