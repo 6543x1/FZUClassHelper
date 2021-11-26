@@ -151,6 +151,9 @@ export default {
         console.log("classIDs",this.classIDs);
       console.log("classIDs[0]",this.classIDs[0].classID);
       this.classID=this.classIDs[0].classID;
+      if(sessionStorage.getItem("role")=="teacher"){
+            this.classID='CIRD9F';
+      }
       let url="api/classes/"+this.classID+"/RandomStu";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
@@ -182,6 +185,9 @@ export default {
       console.log("classIDs",this.classIDs);
       console.log("classIDs[0]",this.classIDs[0].classID);
       this.classID=this.classIDs[0].classID;
+   if(sessionStorage.getItem("role")=="teacher"){
+            this.classID='CIRD9F';
+      }
       let url="api/classes/"+this.classID+"/getVotes";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
@@ -220,6 +226,10 @@ export default {
       console.log("classIDs",this.classIDs);
       console.log("classIDs[0]",this.classIDs[0].classID);
       this.classID=this.classIDs[0].classID;
+     if(sessionStorage.getItem("role")=="teacher"){
+       console.log(sessionStorage.getItem("role"));
+            this.classID='CIRD9F';
+      }
       let url="api/classes/"+this.classID+"/notice";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
@@ -259,6 +269,9 @@ export default {
         console.log("classIDs",this.classIDs);
       console.log("classIDs[0]",this.classIDs[0].classID);
       this.classID=this.classIDs[0].classID;
+      if(sessionStorage.getItem("role")=="teacher"){
+            this.classIDs=[{classID:'CIRD9F',name:'测试用班级'}];
+          }
       let url="api/classes/"+this.classID+"/signIn";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
@@ -290,6 +303,12 @@ export default {
     ReceiveClassID() {
       let url = "api/classes/getMyClass";
       let xhr = new XMLHttpRequest();
+      if(sessionStorage.getItem("role")=="teacher"){
+            this.classID='CIRD9F';
+            this.classIDs=[{classID:'CIRD9F',name:'测试用班级'}];
+            console.log("done")
+            return;
+      }
       service.defaults.headers.common["token"] = sessionStorage.getItem('token');
       // service
       //   .get("api" + "/classes/getMyClass", {})
@@ -326,7 +345,9 @@ export default {
             console.log("...")
           };
           }
-
+          if(sessionStorage.getItem("role")=="teacher"){
+            this.classIDs=[{classID:'CIRD9F',name:'测试用班级'}];
+          }
         }
       
     },

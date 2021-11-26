@@ -1,32 +1,6 @@
 <template>
   <div>
-    <div class="nav">
-      <ul class="select">
-        <li>
-          <a href="javascript:;">{{ className }}</a>
-        </li>
-        <li>
-          <a href="javascript:;"
-            ><img src="../assets/img/通知(3).png" alt="" />{{ notice }}</a
-          >
-        </li>
-        <li>
-          <a href="javascript:;"
-            ><img src="../assets/img/发布.png" alt="" />{{ release }}</a
-          >
-        </li>
-        <li>
-          <a href="" @click="C_main"
-            ><img src="../assets/img/班级.png" alt="" />{{ class_ }}</a
-          >
-        </li>
-        <li>
-          <a href="javascript:;"
-            ><img src="../assets/img/头像.png" alt="" />{{ my }}</a
-          >
-        </li>
-      </ul>
-    </div>
+    <MyNav/>
     <div class="line"></div>
     <div class="process">
       <a href="" @click="C_main" class="arrow"
@@ -40,8 +14,12 @@
 </template>
 
 <script>
+import MyNav from "@/components/MyNav.vue";
 export default {
   name: "Course",
+  components:{
+    MyNav,
+  },
 
   data() {
     return {

@@ -38,7 +38,7 @@
         >
         <span style="float: left; color: red">{{ signDetail.deadLine }}</span>
       </div>
-      <div class="box6" v-if="type == 'normal'">
+      <div class="box6">
         <button
           type="button"
           id="signi"

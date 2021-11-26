@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter,createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Class from "../views/Class.vue";
 import Create from "../views/Create.vue";
@@ -17,6 +17,10 @@ import SignDetail from "../views/SignDetail.vue";
 import Statics from "../views/Statics.vue";
 import PublicNotice from "../views/public/PublicNotice.vue";
 import PublicHome from "../views/public/PublicHome.vue";
+import PublicRandom from "../views/public/PublicRandom.vue";
+import PublicVote from "../views/public/PublicVote.vue";
+import PublicSignIn from "../views/public/PublicSignIn.vue";
+import PublicClassAnswer from "../views/public/PublicClassAnswer.vue";
 
 const routes = [
   {
@@ -152,11 +156,46 @@ const routes = [
     },
   },
 
+  {
+    path: "/PublicRandom",
+    name: "PublicRandom",
+    component: PublicRandom,
+    meta: {
+      title: "随机选人",
+    },
+  },
+  {
+    path: "/PublicVote",
+    name: "PublicVote",
+    component: PublicVote,
+    meta: {
+      title: "发布投票",
+    },
+  },
+  {
+    path: "/PublicSignIn",
+    name: "PublicSignIn",
+    component: PublicSignIn,
+    meta: {
+      title: "发布签到",
+    },
+  },
+ {
+      path: "/PublicClassAnswer",
+      name: "PublicClassAnswer",
+      component: PublicClassAnswer,
+      meta: {
+        title: "班级问答",
+      },
+    },
+
 
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  //  mode:"hash",
+  // base: process.env.BASE_URL,
   routes,
 });
 router.beforeEach((to, from, next) => {
