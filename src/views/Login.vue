@@ -75,6 +75,7 @@ export default {
           // this.$store.mutations.setToken(this.$store.state,res.data.data.jwtToken);
           sessionStorage.setItem("token", res.data.data.jwtToken);
           sessionStorage.setItem("user", JSON.stringify(res.data.data.user));
+          sessionStorage.setItem("role",res.data.data.role);
           let userInfo = sessionStorage.getItem("user");
           console.log(typeof userInfo);
           console.log(userInfo);

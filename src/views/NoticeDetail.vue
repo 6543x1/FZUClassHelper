@@ -20,20 +20,12 @@
           >
             <span style="color: red; font-size: 30px">&lt;</span>
           </button>
-          <center>
+          <!-- <center> -->
             <span class="title">{{ notice.title }}</span>
-          </center>
-          <a
-            href="count.html"
-            style="
-              position: relative;
-              position: relative;
-              float: right;
-              right: 5px;
-            "
+          <!-- </center> -->
+          <button @click="gotoStatics" class="btn_Statics"
             ><img src="../assets/img/投票(1).png" style="height: 15px" />
-            统计结果</a
-          >
+            统计结果</button>
           <span
             style="
               float: left;
@@ -70,6 +62,7 @@ export default {
   data() {
     return {
       notice: {},
+      confirmed:false,
       // confirm:'确认公告'
     };
   },
@@ -94,6 +87,24 @@ export default {
     MyNav,
   }, 
   methods: {
+      gotoStatics() {
+          // let param = {nid: this.notice.nid};
+      let token = sessionStorage.getItem('token');
+      console.log(this.notice.nid);
+      service.defaults.headers.common["token"] = token;
+      service
+        .get("/api/classes/"+this.notice.classID+"/notice/noticeConfirmedStu", {params:{nid: this.notice.nid}})
+        .then((res) => {
+          console.log(res);
+          let result=res.data.data;
+          this.$router.push({name:'Statics',params:{statics:JSON.stringify({
+              type:'notice',data:result})}
+          });
+          
+        
+        })
+        .catch((err) => console.log(err));
+      },
       gotoConfirm(){
         //   let url="api/classes/"+this.notice.classID+"/notice/confirm";
           let param = new FormData();
@@ -132,6 +143,20 @@ export default {
 }
 .btn_noConfirm{
     background: rgb(221, 221, 221);
+}
+.btn_Statics{
+  margin-left:90px;
+  margin-right: 10px;
+  position: relative;
+  float:right;
+   cursor: pointer;
+  border: none;
+  /* display: inline-block; */
+  width: 80px;
+  height: 20px;
+  font-size: 15px;
+  /* background: rgb(1, 176, 255); */
+  background: white;
 }
 </style>
 <style src="../assets/css/style.css" scoped>

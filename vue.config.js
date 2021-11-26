@@ -1,5 +1,12 @@
 module.exports = {
-  // publicPath: './', // 打包用的
+  //  publicPath: './', // 打包用的
+  publicPath: process.env.NODE_ENV === 'production'  // 打包环境
+  //   ? '/production-sub-path/'
+     ? './' 
+     : '/',
+  // 相对路径
+  baseUrl: './',
+
   devServer: {
     proxy: {
       "/api": {

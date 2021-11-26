@@ -172,7 +172,7 @@ export default {
     },
     getHandle1() {
       // console.log("hhh")
-      let token = this.$store.state.token;
+      let token = sessionStorage.getItem('token');
       service.defaults.headers.common["token"] = token;
       service
         .get("api" + "/classes/getMyCreatedClass", {})
@@ -191,7 +191,7 @@ export default {
       let param = new FormData();
       // param.append('classID',this.classID)
       // console.log(this.classID)
-      let token = this.$store.state.token;
+      let token = sessionStorage.getItem('token');
       service.defaults.headers.common["token"] = token;
       service
         .get("api" + "/classes/" + this.classID + "/getVotes", param)

@@ -15,6 +15,8 @@ import VoteDetail from "../views/VoteDetail.vue";
 import RandomDetail from "../views/RandomDetail.vue";
 import SignDetail from "../views/SignDetail.vue";
 import Statics from "../views/Statics.vue";
+import PublicNotice from "../views/public/PublicNotice.vue";
+import PublicHome from "../views/public/PublicHome.vue";
 
 const routes = [
   {
@@ -132,6 +134,25 @@ const routes = [
       title: "统计详情",
     },
   },
+  {
+    path: "/PublicHome",//必须在路由声明params参数
+    name: "PublicHome",
+    component: PublicHome,
+    meta: {
+      title: "发布...",
+    },
+  },
+
+  {
+    path: "/PublicNotice",//必须在路由声明params参数
+    name: "PublicNotice",
+    component: PublicNotice,
+    meta: {
+      title: "发布公告",
+    },
+  },
+
+
 ];
 
 const router = createRouter({

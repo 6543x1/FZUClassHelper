@@ -8,9 +8,9 @@
                     style="outline: none; cursor: pointer; border: none; background: none; font-size: 30px; position: relative;left: 5px; float: left;"><span
                         style="color: red;font-size: 30px;">&lt;</span></button>
                 <span class="title">{{vote.title}}</span>
-                <a href="count.html"
-                    style="position: relative;position: relative; float: right;right: 5px; display: none;"
-                    id="count"><img src="image/投票(1).png" style="height: 15px;"> 参与情况</a>
+              <button @click="gotoStatics" class="btn_Statics"
+            ><img src="../assets/img/投票(1).png" style="height: 15px" />
+            统计结果</button>
                 <span style="float: left;clear: both;margin-left: 100px;color: slategrey;">{{vote.publisher}}</span>
                 <span style="float: left;margin-left: 50px;color: slategrey;">{{vote.publishedTime}}</span>
                 <span style="float: left;margin-left: 50px;color:red">截止时间：</span>
@@ -40,9 +40,6 @@
                         <span color="white" id="butto">投 票</span>
                     </button>
                 <!-- </form> -->
-                <a href="" @click="gotoStatics"
-                    style="position: relative;position: relative;top: 115px;left: 325px;"
-                    id="vote_count"><img src="image/投票(1).png" style="height: 15px;"> 统计结果</a>
             </div>
         </div>
     </div>
@@ -52,6 +49,7 @@
 <script>
 import MyNav from "@/components/MyNav.vue";
 import service from "../api/services/service";
+import axios from "axios";
 export default {
     name:'VoteDetail',
     components:{
@@ -71,15 +69,47 @@ export default {
     },
     methods:{
         gotoStatics(){
-            
+              let token = sessionStorage.getItem('token');
+              let result;
+              let selectionsDetail;
+      console.log(this.vote.vid);
+      service.defaults.headers.common["token"] = token;
+      axios.all([service.get("/api/classes/"+this.vote.classID+"/voter", {params:{vid: this.vote.vid}}),
+        service.get("/api/classes/"+this.vote.classID+"/voteSelections", {params:{vid: this.vote.vid}})]).then(axios.spread((res1,res2)=>{
+            console.log("RES1 RES2",res1,res2);
+            result=res1.data.data;
+            selectionsDetail=res2.data.data;
+             this.$router.push({name:'Statics',params:{statics:JSON.stringify({
+              type:'vote',data:result,selections:selectionsDetail})}
+          });
+        }));
+    //   service
+    //     .get("/api/classes/"+this.vote.classID+"/voter", {params:{vid: this.vote.vid}})
+    //     .then((res) => {
+    //       console.log(res);
+    //       result=res.data.data;
+    //       console.log("voteDETAILresult",result);
+    //     })
+    //     .catch((err) => console.log(err));
+    //     service
+    //     .get("/api/classes/"+this.vote.classID+"/voteSelections", {params:{vid: this.vote.vid}})
+    //     .then((res) => {
+    //       console.log("voteSelectionsRowRes",res);
+    //       selectionsDetail=res.data.data;
+    //     })
+    //     .catch((err) => console.log(err));
+    //     console.log("result",result);
+    //     console.log("detail",selectionsDetail);
+        
+        
         },
         gotoVote(){
                 let param = new FormData();
       param.append("vid", this.vote.vid);
       if(this.vote.limitation==1){
-          param.append("selections",JSON.stringify(this.curSelection));
+          param.append("selections",JSON.stringify([this.curSelection]));
           
-            console.log(JSON.stringify(this.curSelection));
+            console.log(JSON.stringify([this.curSelection]));
       }
       else{
           console.log("selections",this.selections);
@@ -128,4 +158,18 @@ export default {
         .box4{
             height:300px;
         }
+        .btn_Statics{
+  margin-left:90px;
+  margin-right: 10px;
+  position: relative;
+  float:right;
+   cursor: pointer;
+  border: none;
+  /* display: inline-block; */
+  width: 80px;
+  height: 20px;
+  font-size: 15px;
+  /* background: rgb(1, 176, 255); */
+  background: white;
+}
     </style>

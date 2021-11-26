@@ -6,7 +6,7 @@
       <nav>
         <input
           type="button"
-          value="全部"
+          value="尚未完成"
           v-on:click="GetUnfinished"
           id="button-nav"
         />
@@ -38,7 +38,7 @@
         <br><br>
       </nav>
 
-      <div id="section">
+      <div id="section" v-if="flag!=0">
         <table>
           <tr>
             <td id="button-notice">
@@ -56,7 +56,7 @@
           curPage * pageSize)"
         :key="index"
       >
-        {{item.multi}}{{ item.title }}
+        <span class="unfinished">{{item.finished}}</span>{{item.multi}}{{ item.title }}
         <br>
        {{item.className}}&nbsp;截止时间:{{item.deadLine}}
       </li>
@@ -80,6 +80,11 @@
     </div>
      
       </div>
+      <div class="content2" v-if="flag==0">
+        <li >你有{{unfinished[0]}}篇公告未读</li>
+       <li >你有{{unfinished[1]}}个投票未投</li>
+        <li >你有{{unfinished[2]}}个签到未签到</li>
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +102,7 @@ export default {
       classID: "",
       classIDs:[],
       display:[],
+      unfinished:[0,0,0],
       token: "",
       deadline: '',
       publisher: '',
@@ -191,6 +197,9 @@ export default {
              for(var i=0; i<this.display.length;i++){ // 添加className属性
               this.display[i].className=this.classIDs[0].name;
               this.display[i].multi=this.display[i].limitation==1?'(单选)':'(多选)';
+              if(this.display[i].voted==false){
+                this.display[i].finished='(未投票)';
+              }
             // myJson.data[i].
         }
             console.log(typeof(this.display));
@@ -295,6 +304,7 @@ export default {
       //   })
       //   .catch((err) => console.log(err));
       xhr.open("get", url, true);
+      this.token=sessionStorage.getItem('token');
       xhr.setRequestHeader("token", this.token);
       this.addURLParam(url, "classID", this.classID);
       xhr.send(null);
@@ -312,14 +322,21 @@ export default {
             console.log("@@",this.classIDs);
             console.log("@@@",this.classIDs[0].classID);
             // sessionStorage.setItem("classID",this.classID);
-          } else alert("Request was unsuccessful:" + xhr.status);
+          } else{
+            console.log("...")
+          };
+          }
+
         }
-      };
+      
     },
 
     //获取还未完成的所有活动
     GetUnfinished() {
-      let url = "api/classes/{classID}/unconfirmed";
+       console.log("classIDs",this.classIDs);
+      console.log("classIDs[0]",this.classIDs[0].classID);
+      this.classID=this.classIDs[0].classID;
+      let url = "api/classes/"+this.classID+"/unconfirmed";
       let xhr = new XMLHttpRequest();
       xhr.open("get", url, true);
       xhr.setRequestHeader("token", this.token);
@@ -328,14 +345,23 @@ export default {
       xhr.onreadystatechange = ()=> {
         if (xhr.readyState == 4) {
           if (xhr.status >= 200 && xhr.status < 300) {
-            alert("获取成功！");
+            // alert("获取成功！");
             var myJson = JSON.parse(xhr.responseText);
-            console.log(myJson);
-            this.deadline = myJson.data.deadline;
-            this.publisher = myJson.data.publisher;
-            this.title = myJson.data.title;
-            this.vid = myJson.data.vid;
+            console.log("myJson",myJson);
+            this.display=myJson.data.notice;
+            this.display.push(myJson.data.vote);
+            this.display.push(myJson.data.signIn);
+            console.log(typeof(this.display));
+            console.log(this.display);
+            this.pageSum=Math.ceil(this.display.length/this.pageSize);
+            this.unfinished=[myJson.data.notice.length,myJson.data.vote.length,myJson.data.signIn.length];
+            console.log("unfinished",this.unfinished);
+            // this.deadline = myJson.data[0].deadline;
+            // this.publisher = myJson.data[0].publisher;
+            // this.title = myJson.data[0].title;
+            // this.vid = myJson.data[0].vid;
             this.ModifyDeadline();
+            this.flag=0;
           } else alert("Request was unsuccessful:" + xhr.status);
         }
       };
@@ -376,6 +402,17 @@ export default {
     margin: 10px auto;
     list-style-type: none;
 }
+.content2 li{
+  height: 50px;
+    width: 50%;
+    font-size: 15px;
+    color: #3393FC;
+    /* border-top: 1px solid #000; */
+    border: 1px solid #000;
+    /* margin: -1px; */
+    margin: 10px auto;
+    list-style-type: none;
+} 
 #pageControl{
   margin-left:50px;
 }
@@ -392,6 +429,9 @@ export default {
 }
 .btn_PageControl:hover {
   background: rgb(221, 221, 221);
+}
+.unfinished{
+  color:red;
 }
   
 </style>

@@ -77,7 +77,7 @@ export default {
     postHandle() {
       let param = new FormData();
       param.append("classID", this.classID);
-      let token = this.$store.state.token;
+      let token =sessionStorage.getItem('token');
       // console.log(token)
       service.defaults.headers.common["token"] = token;
       service

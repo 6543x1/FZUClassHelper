@@ -20,19 +20,12 @@
           <span style="color: red; font-size: 30px">&lt;</span>
         </button>
         <span class="title">定时签到</span>
-        <a
-          href="count.html"
-          style="
-            position: relative;
-            float: right;
-            right: 5px;
-            display:block;
-          "
-          id="count"
-          v-if="signed == true"
-          ><img src="../assets/img/投票(1).png" style="height: 15px" />
-          统计结果</a
-        >
+         <button @click="gotoStatics" class="btn_Statics"
+            ><img src="../assets/img/投票(1).png" style="height: 15px" />
+            统计结果</button>
+        <div class="notice_confirm">
+          <button @click="gotoConfirm" :class='[signed==false?"btn_confirm":"btn_noConfirm"]'>{{ confirm }}</button>
+        </div>
         <span
           style="float: left; clear: both; margin-left: 100px; color: slategrey"
           >{{ signDetail.publisher }}</span
@@ -86,6 +79,25 @@ export default {
     //, this.sum=this.randomStu.students.length;
   },
   methods: {
+     gotoStatics() {
+          let param = new FormData();
+          param.append("signID",this.signDetail.signID);
+      let token = sessionStorage.getItem('token');
+      console.log(this.signDetail.signID);
+      service.defaults.headers.common["token"] = token;
+      service
+        .post("/api/classes/"+this.signDetail.classID+"/getSignInDetail", param)
+        .then((res) => {
+          console.log(res);
+          let result=res.data.data;
+          this.$router.push({name:'Statics',params:{statics:JSON.stringify({
+              type:'sign',data:result})}
+          });
+          
+        
+        })
+        .catch((err) => console.log(err));
+      },
     gotoSign() {
       let param = new FormData();
       param.append("signID", this.signDetail.signID);
@@ -116,7 +128,7 @@ export default {
 <style scoped>
 .title{
     position: relative;
-    margin-left: 20px;
+    margin-left: 150px;
     float:center;
 }
 .box6 button {
@@ -137,5 +149,19 @@ export default {
 }
 .btn_signed {
   background: rgb(164, 164, 164);
+}
+.btn_Statics{
+  margin-left:90px;
+  margin-right: 10px;
+  position: relative;
+  float:right;
+   cursor: pointer;
+  border: none;
+  /* display: inline-block; */
+  width: 80px;
+  height: 20px;
+  font-size: 15px;
+  /* background: rgb(1, 176, 255); */
+  background: white;
 }
 </style>

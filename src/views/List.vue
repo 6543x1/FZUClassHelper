@@ -33,23 +33,22 @@
       <div class="line"></div>
       <div class="line0"></div>
       <ul id="people">
+        <li>学生</li>
         <li v-for="(item, index) in student" :key="index">
-          <p>序号：{{ item.points }}</p>
-          <p>身份：{{ item.username }}</p>
+          <p>学号：{{ item.username }}</p>
           <p>真实名字：{{ item.realName }}</p>
         </li>
+        <li>老师</li>
         <li v-for="(item, index) in teacher" :key="index">
-          <p>序号：{{ item.points }}</p>
-          <p>身份：{{ item.username }}</p>
+          <p>工号：{{ item.username }}</p>
           <p>真实名字：{{ item.realName }}</p>
         </li>
         <li v-for="(item, index) in assistant" :key="index">
-          <p>序号：{{ item.points }}</p>
-          <p>身份：{{ item.username }}</p>
+          <p>学号：{{ item.username }}</p>
           <p>真实名字：{{ item.realName }}</p>
         </li>
+        <li v-if="monitor!='undefined'">班长</li>
         <li v-for="(item, index) in monitor" :key="index">
-          <p>序号：{{ item.points }}</p>
           <p>身份：{{ item.username }}</p>
           <p>真实名字：{{ item.realName }}</p>
         </li>
@@ -94,7 +93,7 @@ export default {
       // console.log("hhh")
       let param = new FormData();
       param.append("classID", this.classID);
-      let token = this.$store.state.token;
+      let token =sessionStorage.getItem('token');
       service.defaults.headers.common["token"] = token;
       service
         .get("/api" + "/classes/" + this.classID + "/ClassMembers", param)
@@ -121,6 +120,7 @@ export default {
 // @import url("../assets/css/nav.css");
 // @import url("../assets/css/create.css");
 .process {
+  height:auto;
   position: relative;
 }
 .process h2 {
@@ -142,7 +142,7 @@ export default {
 }
 #people li {
   height: 100px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid black;
 }
 #people li p {
