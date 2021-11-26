@@ -14,6 +14,7 @@ import NoticeDetail from "../views/NoticeDetail.vue";
 import VoteDetail from "../views/VoteDetail.vue";
 import RandomDetail from "../views/RandomDetail.vue";
 import SignDetail from "../views/SignDetail.vue";
+import Statics from "../views/Statics.vue";
 
 const routes = [
   {
@@ -121,6 +122,14 @@ const routes = [
     component: SignDetail,
     meta: {
       title: "签到详情",
+    },
+  },
+  {
+    path: "/Statics/:statics",//必须在路由声明params参数
+    name: "Statics",
+    component: Statics,
+    meta: {
+      title: "统计详情",
     },
   },
 ];

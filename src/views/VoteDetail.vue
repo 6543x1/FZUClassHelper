@@ -40,8 +40,8 @@
                         <span color="white" id="butto">投 票</span>
                     </button>
                 <!-- </form> -->
-                <a href="vote_count.html"
-                    style="position: relative;position: relative;top: 115px;left: 325px;  display: none;"
+                <a href="" @click="gotoStatics"
+                    style="position: relative;position: relative;top: 115px;left: 325px;"
                     id="vote_count"><img src="image/投票(1).png" style="height: 15px;"> 统计结果</a>
             </div>
         </div>
@@ -70,6 +70,9 @@ export default {
         }
     },
     methods:{
+        gotoStatics(){
+            
+        },
         gotoVote(){
                 let param = new FormData();
       param.append("vid", this.vote.vid);
